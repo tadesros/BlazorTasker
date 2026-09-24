@@ -1,0 +1,41 @@
+﻿
+<!-- Need a route for each component -->
+@page "/reverseastring"
+
+<PageTitle>Reverse a String</PageTitle>
+
+
+<h3>Reverse A String</h3>
+
+<div class="vstack gap-3 col-8 col-md-6">
+    <InputText class="form-control" placeholder="Enter a string to reverse" @bind-Value="message"/>
+    <div class="text-end">
+
+       <button class="btn btn-primary" @onclick="ReverseMe">Reverse Me</button>
+         
+    </div>
+    <hr />
+
+    <div>@displayMessage</div>
+</div>
+
+
+@code {
+    //Someone cannot access this in parent controller
+    private string message = "Reverse Me";
+    private string reversedMessage = "";
+    private string displayMessage = "";
+
+    private void ReverseMe()
+    {
+        //Reset it. 
+        reversedMessage = "";
+
+        char[] charArray = message.ToCharArray();
+        Array.Reverse(charArray);
+        reversedMessage = new string(charArray);
+
+        displayMessage = $"The reverse of {message} is {reversedMessage}";
+    }   
+        
+}

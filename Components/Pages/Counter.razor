@@ -1,0 +1,27 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+@* Displays a simple counter page with a button that increments the current count. *@
+<h1>Counter</h1>
+
+@* Shows the current counter value and updates automatically when the value changes. *@
+<p role="status">Current count: @currentCount</p>
+
+@* Raises a click event that increases the counter by one. *@
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    /// <summary>
+    /// Stores the current counter value displayed on the page.
+    /// </summary>
+    private int currentCount = 0;
+
+    /// <summary>
+    /// Increments the counter and causes the component to re-render.
+    /// </summary>
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

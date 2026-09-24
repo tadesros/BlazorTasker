@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--
+    File: wwwroot/index.html
+    Purpose:
+      - Root HTML document for the Blazor WebAssembly application ("BlazorTasker").
+      - Provides the static shell that the Blazor runtime replaces/attaches to at startup.
+      - Contains lightweight loading UI and an error UI for early runtime states.
+
+    Key sections and notes:
+      - <base href="/">:
+          Required for Blazor routing. Keep this accurate for correct client-side navigation.
+          If the app is hosted on a sub-path, update this value accordingly.
+
+      - <link rel="preload" id="webassembly" />:
+          Placeholder element used by the build/runtime to inject a preload for the Blazor WebAssembly payload.
+          The runtime or build script may update this element (href/as attributes) before fetching the WASM.
+          Do not remove the element if you rely on automated tooling that expects it.
+
+      - Styles:
+          * "lib/bootstrap/..." - Bootstrap shipped with the project (static file).
+          * "css/app.css" - App-level styles (author-maintained).
+          * "BlazorTasker.styles.css" - Generated scoped/component CSS produced by the Blazor build.
+          Keep the order so framework-generated CSS loads after your library styles when intended.
+
+      - <script type="importmap"></script>:
+          Import map placeholder. Populate only if you are providing JavaScript module path remapping.
+          Leaving empty is fine for default Blazor scenarios.
+
+      - Loading UI (#app):
+          - The <div id="app"> element is the root mount point for the Blazor renderer.
+            Do not remove or rename this id unless you also update the renderer startup.
+          - A minimal SVG + text is used as a loading indicator before the app finishes booting.
+            Customize these elements (or style them via CSS) to change the initial loading experience.
+
+      - Error UI (#blazor-error-ui):
+          Default static UI displayed for unhandled errors that occur before or during startup.
+          Contains a reload link and a dismiss control. You can style or modify this content, but keep the ids/classes
+          if you rely on the Blazor framework's built-in behavior.
+
+      - Script reference:
+          The script tag references the Blazor boot script produced by the build. The filename frequently contains
+          a fingerprint/hash inserted by the build process:
+            <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+          During development the SDK may provide an unhashed name like:
+            _framework/blazor.webassembly.js
+          In production builds the file path will typically include a fingerprint. Do not hard-code a path that prevents
+          tooling from inserting the fingerprint if you rely on the default build pipeline.
+
+    Notes for maintainers:
+      - This file lives in the static root (__wwwroot__) and is served as-is. Any changes here affect initial load + routing.
+      - If converting to an ASP.NET hosted Blazor WebAssembly app or changing base paths, verify the <base> and script paths.
+      - Keep markup minimal to reduce first-paint time; prefer CSS/inline SVG for the loading indicator over heavy assets.
+
+-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blazor Tasker</title>
+
+    <!-- Required for client-side routing to work correctly -->
+    <base href="/" />
+
+    <!-- Preload placeholder -->
+    <link rel="preload" id="webassembly" />
+
+    <!-- Library and app styles (single load each; no duplicates) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/app.css" />
+
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="BlazorTasker.styles.css" rel="stylesheet" />
+
+    <script type="importmap"></script>
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss">🗙</span>
+    </div>
+
+    <!-- Blazor startup script (unchanged) -->
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+</body>
+
+</html>
