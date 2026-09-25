@@ -1,0 +1,57 @@
+# Builds BlazorTasker and publishes it to GitHub Pages
+# every time something is pushed to the master branch.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:        # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Install .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish the app
+        run: dotnet publish BlazorTasker.csproj -c Release -o release
+
+      - name: Adjust for GitHub Pages
+        run: |
+          # The site lives at /BlazorTasker/, not at the root
+          sed -i 's|<base href="/" />|<base href="/BlazorTasker/" />|' release/wwwroot/index.html
+          # Make deep links like /counter load the app instead of a GitHub 404
+          cp release/wwwroot/index.html release/wwwroot/404.html
+          # Stop GitHub from hiding the _framework folder
+          touch release/wwwroot/.nojekyll
+
+      - name: Package the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: release/wwwroot
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
