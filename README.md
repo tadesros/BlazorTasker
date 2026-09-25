@@ -1,5 +1,16 @@
 # BlazorTasker
 
+
+DEPLOYMENT INFO
+-------------------
+
+https://tadesros.github.io/BlazorTasker/counter
+
+
+
+
+
+
 A small **Blazor WebAssembly** app built on **.NET 10** to show the basics of Blazor: project structure, Razor syntax and components, routing, and layout components. It runs entirely in the browser, with no server-side code.
 
 ## Features
